@@ -11,7 +11,7 @@ class MunicipalityController extends Controller
     {
         $data = DB::connection('mysql_tupaics')->table('addresscitymun')
             ->where('provCode', '1265')
-            ->select('addresscitymun.citymuncode', 'addresscitymun.citymundesc')->get();
+            ->select('addresscitymun.citymuncode AS code', 'addresscitymun.citymundesc AS name')->get();
 
         return response()->json($data);
     }
