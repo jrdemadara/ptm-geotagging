@@ -2,43 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Beneficiary;
 use App\Models\Livelihood;
 use App\Models\Profile;
 use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'lastname' => 'required|string',
-            'firstname' => 'required|string',
-            'middlename' => 'required|string',
-            'extension' => 'required|string',
-            'birthdate' => 'required|string',
-            'occupation' => 'required|string',
-            'phone' => 'required|numeric',
-            'lat' => 'required|string',
-            'lon' => 'required|string',
-            'solo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'family' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'household' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'beneficiaries' => 'required',
-            'livelihoods' => 'required',
-            'skills' => 'required',
-        ]);
-
         $user = Auth::user();
 
+        // Create or update the profile
         $profile = Profile::updateOrCreate([
             'lastname' => Str::lower($request->input('lastname')),
             'firstname' => Str::lower($request->input('firstname')),
             'middlename' => Str::lower($request->input('middlename')),
-
         ], [
             'extension' => Str::lower($request->input('extension')),
             'birthdate' => $request->input('birthdate'),
@@ -49,53 +32,79 @@ class ProfileController extends Controller
             'user_id' => $user->id,
         ]);
 
-        if ($request->beneficiaries) {
-            foreach ($request->beneficiaries as $beneficiary) {
-                Profile::updateOrCreate([
-                    'fullname' => Str::lower($beneficiary['fullname']),
-                ], [
-                    'precint' => $beneficiary['precint'],
-                    'birthdate' => $beneficiary['birthdate'],
-                    'profile_id' => $profile->id,
-                ]);
-
+        // Create or update beneficiaries
+        if ($request->has('beneficiaries')) {
+            $beneficiariesJson = $request->input('beneficiaries');
+            if (!is_null($beneficiariesJson)) {
+                $beneficiaries = json_decode($beneficiariesJson, true);
+                foreach ($beneficiaries as $beneficiaryData) {
+                    Beneficiary::updateOrCreate([
+                        'profile_id' => $profile->id,
+                        'fullname' => Str::lower($beneficiaryData['fullname']),
+                    ], [
+                        'precinct' => $beneficiaryData['precinct'],
+                        'birthdate' => $beneficiaryData['birthdate'],
+                    ]);
+                }
             }
         }
 
-        if ($request->livelihoods) {
-            foreach ($request->livelihoods as $livelihood) {
-                Livelihood::create([
-                    'livelihood' => Str::lower($livelihood['livelihood']),
-                    'profile_id' => $profile->id,
-                ]);
+        // Create or update livelihoods
+        if ($request->has('livelihoods')) {
+            $livelihoodsJson = $request->input('livelihoods');
+            if (!is_null($livelihoodsJson)) {
+                $livelihoods = json_decode($livelihoodsJson, true);
+
+                if (isset($livelihoods['livelihoods'])) {
+                    foreach ($livelihoods['livelihoods'] as $livelihood) {
+                        Livelihood::updateOrCreate([
+                            'profile_id' => $profile->id,
+                            'livelihood' => Str::lower($livelihood),
+                        ]);
+                    }
+                }
 
             }
+
         }
 
-        if ($request->skills) {
-            foreach ($request->skills as $skill) {
-                Skill::create([
-                    'skill' => Str::lower($skill['skill']),
-                    'profile_id' => $profile->id,
-                ]);
+        // Create or update skills
+        if ($request->has('skills')) {
+            $skillsJson = $request->input('skills');
+            if (!is_null($skillsJson)) {
+                $skills = json_decode($skillsJson, true);
+                if (isset($skills['skills'])) {
+                    foreach ($skills['skills'] as $skill) {
+                        Skill::updateOrCreate([
+                            'profile_id' => $profile->id,
+                            'skill' => Str::lower($skill),
+                        ]);
+                    }
+                }
+
             }
+
         }
 
-        $this->storePhoto('solo', $request->solo, $profile->id);
-        $this->storePhoto('family', $request->family, $profile->id);
-        $this->storePhoto('household', $request->household, $profile->id);
+        // Store photos
+        $this->storePhoto('solo', $request->input('personalPhoto'), $profile->id);
+        // $this->storePhoto('family', $request->input('familyPhoto'), $profile->id);
+        // $this->storePhoto('household', $request->input('livelihoodPhoto'), $profile->id);
 
-        return response(201);
+        return response()->json(['message' => 'Profile created successfully'], 201);
+
     }
 
     private function storePhoto($path, $photo, $userId)
     {
-        $image_64 = $photo;
-        $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
-        $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
-        $image = str_replace($replace, '', $image_64);
-        $image = str_replace(' ', '+', $image);
-        $imageName = $userId . '.' . $extension;
-        Storage::disk(`local/$path`)->put($imageName, base64_decode($image));
+        $image_64 = base64_encode($photo);
+        Log::debug('Decoded Photo: ' . print_r($photo, true));
+
+        // $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
+        // $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
+        // $image = str_replace($replace, '', $image_64);
+        // $image = str_replace(' ', '+', $image);
+        // $imageName = $userId . '.' . $extension;
+        // Storage::disk(`local/$path`)->put($imageName, base64_decode($image));
     }
 }

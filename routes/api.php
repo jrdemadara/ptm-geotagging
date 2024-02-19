@@ -24,12 +24,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //* Public Routes
+Route::get('/v1/uri/municipality', [MunicipalityController::class, 'index']);
 Route::post('/v1/uri/register', [RegisterController::class, 'store']);
 Route::post('/v1/uri/login', [LoginController::class, 'store']);
 
 //* Protected Routes
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
-    Route::get('/v1/uri/municipality', [MunicipalityController::class, 'index']);
+
     Route::get('/v1/uri/initialize', [InitializeController::class, 'index']);
     Route::post('/v1/uri/profile', [ProfileController::class, 'store']);
 

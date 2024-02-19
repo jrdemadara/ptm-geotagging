@@ -31,6 +31,12 @@ class LoginController extends Controller
             ]);
         }
 
+        if ($user->device_id !== $request->device_id) {
+            throw ValidationException::withMessages([
+                'cross-login' => ['This account does not belong to this device.'],
+            ]);
+        }
+
         $user->update([
             'device_id' => $request->device_id,
             'is_active' => true,
@@ -39,11 +45,11 @@ class LoginController extends Controller
         $user->tokens()->where('tokenable_id', $user->id)->delete();
 
         $token = $user->createToken($user->device_id)->plainTextToken;
-        $response = [
+        $data = [
             'access_token' => $token,
         ];
 
-        return response($response, 200);
+        return response()->json($data);
 
     }
 }

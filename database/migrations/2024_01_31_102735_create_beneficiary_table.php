@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('beneficiaries', function (Blueprint $table) {
             $table->id();
-            $table->string('precint')->nullable();
+            $table->string('precinct')->nullable();
             $table->string('fullname');
             $table->date('birthdate');
             $table->foreignId('profile_id')->constrained('profiles')->onDelete('cascade')->onUpdate('cascade');

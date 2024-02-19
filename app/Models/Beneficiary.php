@@ -9,7 +9,7 @@ class Beneficiary extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'precint',
+        'precinct',
         'fullname',
         'birthdate',
         'profile_id',

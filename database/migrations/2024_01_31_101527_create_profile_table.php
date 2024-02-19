@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('firstname');
             $table->string('middlename');
-            $table->string('extension');
+            $table->string('extension')->nullable();
             $table->date('birthdate');
             $table->string('occupation');
-            $table->integer('phone')->unique();
+            $table->string('phone')->unique();
             $table->string('lat');
             $table->string('lon');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');

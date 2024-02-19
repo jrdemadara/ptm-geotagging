@@ -17,7 +17,7 @@ class RegisterController extends Controller
             'municipality' => 'required|string',
             'password' => 'required|string',
             'device_id' => 'required|string',
-            'is_admin' => 'required|boolean',
+            'is_admin' => 'required',
         ]);
 
         User::create([
@@ -26,11 +26,15 @@ class RegisterController extends Controller
             'municipality' => Str::lower($request->input('municipality')),
             'password' => Hash::make($request->input('password')),
             'device_id' => $request->input('device_id'),
-            'is_admin' => $request->input('is_admin'),
-            'is_active' => false,
+            'is_admin' => false,
+            'is_active' => true,
         ]);
 
-        return response(201);
+        $data = [
+            'message' => "success",
+        ];
+
+        return response()->json($data);
 
     }
 
