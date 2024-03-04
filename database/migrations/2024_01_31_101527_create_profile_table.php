@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('lat');
             $table->string('lon');
+            $table->string('qrcode');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();

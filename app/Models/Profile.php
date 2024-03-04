@@ -18,6 +18,7 @@ class Profile extends Model
         'phone',
         'lat',
         'lon',
+        'qrcode',
         'user_id',
     ];
 }

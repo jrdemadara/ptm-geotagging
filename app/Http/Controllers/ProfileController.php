@@ -52,6 +52,7 @@ class ProfileController extends Controller
             'occupation' => Str::lower($data['occupation']),
             'lat' => $data['lat'],
             'lon' => $data['lon'],
+            'qrcode' => $data['qrcode'],
             'user_id' => auth()->id(),
         ]);
 
@@ -103,7 +104,7 @@ class ProfileController extends Controller
         $imageData = file_get_contents($photo);
         $photo = base64_decode($imageData);
         $filename = $userId . '.jpg';
-        $storedPath = Storage::disk('local')->put($path . '/' . $filename, $photo);
+        Storage::disk('local')->put($path . '/' . $filename, $photo);
     }
 
 }
