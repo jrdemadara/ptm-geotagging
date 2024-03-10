@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\InitializeController;
+use App\Http\Controllers\LoginAdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MunicipalityController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegisterAdminController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,11 +29,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/v1/uri/municipality', [MunicipalityController::class, 'index']);
 Route::post('/v1/uri/register', [RegisterController::class, 'store']);
 Route::post('/v1/uri/login', [LoginController::class, 'store']);
+Route::post('/v1/uri/admin-register', [RegisterAdminController::class, 'store']);
+Route::post('/v1/uri/admin-login', [LoginAdminController::class, 'store']);
 
 //* Protected Routes
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
+    //Agents Request
     Route::get('/v1/uri/initialize', [InitializeController::class, 'index']);
     Route::post('/v1/uri/profile', [ProfileController::class, 'store']);
+
+    //Admin Requests
+    Route::get('/v1/uri/geodata', [InitializeController::class, 'index']);
 
 });
