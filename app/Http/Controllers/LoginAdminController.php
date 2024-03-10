@@ -14,33 +14,41 @@ class LoginAdminController extends Controller
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required',
-            'device_id' => 'required',
+            //'device_id' => 'required',
         ]);
 
         $user = User::where('email', $request->email)->first();
 
+        if (!$user) {
+            throw ValidationException::withMessages([
+                'invalid_email' => ['The provided credentials are incorrect.'],
+            ]);
+
+        }
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'invalid' => ['The provided credentials are incorrect.'],
+                'invalid_password' => ['The provided credentials are incorrect.'],
             ]);
         }
 
         if ($user->is_admin == 0) {
             throw ValidationException::withMessages([
-                'admin-login' => ['This account is intended for agents use only.'],
+                'cross_login' => ['This account is intended for agents use only.'],
             ]);
         }
 
-        if ($user->device_id !== $request->device_id) {
-            throw ValidationException::withMessages([
-                'cross-login' => ['This account does not belong to this device.'],
-            ]);
-        }
+        //todo: finalized device security check
+        // if ($user->device_id !== $request->device_id) {
+        //     throw ValidationException::withMessages([
+        //         'cross-login' => ['This account does not belong to this device.'],
+        //     ]);
+        // }
 
-        $user->update([
-            'device_id' => $request->device_id,
-            'is_active' => true,
-        ]);
+        // $user->update([
+        //     'device_id' => $request->device_id,
+        //     'is_active' => true,
+        // ]);
 
         $user->tokens()->where('tokenable_id', $user->id)->delete();
 

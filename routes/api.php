@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GeodataController;
 use App\Http\Controllers\InitializeController;
 use App\Http\Controllers\LoginAdminController;
 use App\Http\Controllers\LoginController;
@@ -40,6 +41,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('/v1/uri/profile', [ProfileController::class, 'store']);
 
     //Admin Requests
-    Route::get('/v1/uri/geodata', [InitializeController::class, 'index']);
+    Route::get('/v1/uri/geodata', [GeodataController::class, 'index']);
 
 });
