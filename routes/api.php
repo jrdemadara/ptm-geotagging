@@ -32,6 +32,7 @@ Route::post('/v1/uri/register', [RegisterController::class, 'store']);
 Route::post('/v1/uri/login', [LoginController::class, 'store']);
 Route::post('/v1/uri/admin-register', [RegisterAdminController::class, 'store']);
 Route::post('/v1/uri/admin-login', [LoginAdminController::class, 'store']);
+Route::get('/v1/uri/geodata', [GeodataController::class, 'index']);
 
 //* Protected Routes
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
@@ -41,6 +42,5 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::post('/v1/uri/profile', [ProfileController::class, 'store']);
 
     //Admin Requests
-    Route::get('/v1/uri/geodata', [GeodataController::class, 'index']);
 
 });

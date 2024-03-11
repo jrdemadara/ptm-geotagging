@@ -8,7 +8,7 @@ class GeodataController extends Controller
 {
     public function index()
     {
-        $data = Profile::select('lat', 'lon')->get();
+        $data = Profile::select('lon', 'lat', 'lastname', 'firstname', 'middlename')->get();
         return response()->json($data);
     }
 }
