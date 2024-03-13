@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\GeodataController;
-use App\Http\Controllers\InitializeController;
+use App\Http\Controllers\InitializeAssistanceController;
+use App\Http\Controllers\InitializeMemberController;
 use App\Http\Controllers\LoginAdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MunicipalityController;
@@ -38,7 +39,9 @@ Route::get('/v1/uri/geodata', [GeodataController::class, 'index']);
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     //Agents Request
-    Route::get('/v1/uri/initialize', [InitializeController::class, 'index']);
+    Route::get('/v1/uri/initialize-assistance', [InitializeAssistanceController::class, 'index']);
+    Route::get('/v1/uri/initialize-member', [InitializeMemberController::class, 'index']);
+
     Route::post('/v1/uri/profile', [ProfileController::class, 'store']);
 
     //Admin Requests

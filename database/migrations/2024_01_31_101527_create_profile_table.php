@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('lat');
             $table->string('lon');
             $table->string('qrcode');
+            $table->boolean('has_ptmid');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();
