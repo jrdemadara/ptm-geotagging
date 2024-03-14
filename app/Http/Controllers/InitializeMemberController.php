@@ -22,9 +22,9 @@ class InitializeMemberController extends Controller
             ->join('stattype', 'financial.statserial', '=', 'stattype.statserial')
             ->where('recipient.municipality', $code[0]->citymuncode)
             ->where('recipient.isdelete', 0)
-            ->select('recipient.precintno', 'recipient.lastname', 'recipient.firstname', 'recipient.middlename',
-                'recipient.extension', 'recipient.birthdate', 'recipient.contactno', 'recipient.occupation',
-                'recipient.isptmid', 'stattype.statname', 'financial.amount', 'financial.dateavailed')->get();
+            ->select('recipient.precintno AS precinct', 'recipient.lastname', 'recipient.firstname', 'recipient.middlename',
+                'recipient.extension', 'recipient.birthdate', 'recipient.contactno AS contact', 'recipient.occupation',
+                'recipient.isptmid', 'stattype.statname AS assistance', 'financial.amount', 'financial.dateavailed')->get();
 
         return response()->json($data);
     }
