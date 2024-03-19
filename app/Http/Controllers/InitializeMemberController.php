@@ -17,14 +17,12 @@ class InitializeMemberController extends Controller
             ->where('citymunDesc', $request->input('municipality'))
             ->select('addresscitymun.citymuncode')->get();
 
-        $data = DB::connection('mysql_tupaics')->table('financial')
-            ->join('recipient', 'financial.recserial', '=', 'recipient.recserial')
-            ->join('stattype', 'financial.statserial', '=', 'stattype.statserial')
-            ->where('recipient.municipality', $code[0]->citymuncode)
-            ->where('recipient.isdelete', 0)
-            ->select('recipient.precintno AS precinct', 'recipient.lastname', 'recipient.firstname', 'recipient.middlename',
-                'recipient.extension', 'recipient.birthdate', 'recipient.contactno AS contact', 'recipient.occupation',
-                'recipient.isptmid', 'stattype.statname AS assistance', 'financial.amount', 'financial.dateavailed')->get();
+        $data = DB::connection('mysql_tupaics')->table('recipient')
+            ->where('municipality', $code[0]->citymuncode)
+            ->where('isdelete', 0)
+            ->select('precintno AS precinct', 'lastname', 'firstname', 'middlename',
+                'extension', 'birthdate', 'contactno AS contact', 'occupation',
+                'isptmid')->get();
 
         return response()->json($data);
     }
