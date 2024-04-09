@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assistance;
 use App\Models\Beneficiary;
 use App\Models\Livelihood;
 use App\Models\Profile;
@@ -35,10 +36,11 @@ class ProfileController extends Controller
         $familyPhoto = $request->file('familyPhoto');
         $livelihoodPhoto = $request->file('livelihoodPhoto');
 
-        // Get beneficiaries, skills, and livelihoods from the data
+        // Get beneficiaries, skills, livelihoods and assistance from the data
         $beneficiariesJson = $data['beneficiaries'] ?? [];
         $skillsJson = $data['skills'] ?? [];
         $livelihoodsJson = $data['livelihoods'] ?? [];
+        $assistanceJson = $data['assistance'] ?? [];
 
         // Create or update the profile
         $profile = Profile::updateOrCreate([
@@ -53,6 +55,7 @@ class ProfileController extends Controller
             'lat' => $data['lat'],
             'lon' => $data['lon'],
             'qrcode' => $data['qrcode'],
+            'has_ptmid' => $data['hasptmid'],
             'user_id' => auth()->id(),
         ]);
 
@@ -85,6 +88,20 @@ class ProfileController extends Controller
                 Livelihood::updateOrCreate([
                     'profile_id' => $profile->id,
                     'livelihood' => Str::lower($livelihood),
+                ]);
+            }
+        }
+
+        // Create or update assistance
+        if (!is_null($assistanceJson)) {
+            foreach ($assistanceJson as $assistance) {
+                Assistance::updateOrCreate([
+                    'profile_id' => $profile->id,
+                    'assistance' => Str::lower($assistance['assistance']),
+
+                ], [
+                    'amount' => $assistance['amount'],
+                    'released_at' => $assistance['released_at'],
                 ]);
             }
         }

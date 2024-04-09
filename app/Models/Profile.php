@@ -19,6 +19,7 @@ class Profile extends Model
         'lat',
         'lon',
         'qrcode',
+        'has_ptmid',
         'user_id',
     ];
 }
