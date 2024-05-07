@@ -44,11 +44,12 @@ class ProfileController extends Controller
 
         // Create or update the profile
         $profile = Profile::updateOrCreate([
+            'precinct' => Str::lower($data['precinct']),
+        ], [
             'lastname' => Str::lower($data['lastname']),
             'firstname' => Str::lower($data['firstname']),
             'middlename' => Str::lower($data['middlename']),
             'phone' => $data['phone'],
-        ], [
             'extension' => Str::lower($data['extension']),
             'birthdate' => $data['birthdate'],
             'occupation' => Str::lower($data['occupation']),

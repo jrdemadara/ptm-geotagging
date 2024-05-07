@@ -47,6 +47,7 @@ class LoginController extends Controller
         $token = $user->createToken($user->device_id)->plainTextToken;
         $data = [
             'access_token' => $token,
+            'municipality' => $user->municipality,
         ];
 
         return response()->json($data);

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
+            $table->string('precinct');
             $table->string('lastname');
             $table->string('firstname');
             $table->string('middlename');

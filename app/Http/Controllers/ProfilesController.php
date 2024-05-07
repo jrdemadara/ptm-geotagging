@@ -9,15 +9,7 @@ class ProfilesController extends Controller
 {
     public function index()
     {
-        $profiles = Profile::select('id', 'lastname', 'firstname', 'middlename', 'extension', 'birthdate', 'occupation', 'phone', 'lat', 'lon', 'has_ptmid', 'created_at')->paginate(1);
-
-        // $data = [
-        //     'profiles' => $profiles,
-        //     'solo' => $this->getImages('solo'),
-        //     'family' => $this->getImages('family'),
-        //     'household' => $this->getImages('household'),
-        // ];
-        // Add base64 encoded images to each profile
+        $profiles = Profile::select('id', 'lastname', 'firstname', 'middlename', 'extension', 'birthdate', 'occupation', 'phone', 'lat', 'lon', 'has_ptmid', 'created_at')->paginate(10);
 
         $profilesWithImages = [];
 
@@ -55,40 +47,15 @@ class ProfilesController extends Controller
             $profilesWithImages[] = $profileData;
         }
 
-// Extract pagination information
+        // Extract pagination information
         $paginationInfo = [
             'current_page' => $profiles->currentPage(),
             'next_page' => $profiles->nextPageUrl(),
             'last_page' => $profiles->lastPage(),
         ];
 
-// Return JSON response with paginated profiles including base64 encoded images
+        // Return JSON response with paginated profiles including base64 encoded images
         return response()->json(['profiles' => $profilesWithImages, 'pagination' => $paginationInfo]);
 
-    }
-
-    public function getImages($path)
-    {
-        // Get all files in the storage directory
-        $files = Storage::files('/solo');
-
-        $images = [];
-
-        foreach ($files as $file) {
-            // Read the file contents
-            $contents = Storage::get($file);
-
-            // Encode the contents to base64
-            $base64 = base64_encode($contents);
-
-            // Add to the images array
-            $images[] = [
-                'name' => basename($file), // Optional: You can include the file name in the response
-                'data' => $base64,
-            ];
-        }
-
-        // Return JSON response with base64 encoded images
-        return response()->json(['images' => $images]);
     }
 }

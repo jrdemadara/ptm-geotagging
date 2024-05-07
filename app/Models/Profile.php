@@ -9,6 +9,7 @@ class Profile extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'precinct',
         'lastname',
         'firstname',
         'middlename',
