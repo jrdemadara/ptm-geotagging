@@ -28,5 +28,7 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+
+        <env name="MAPBOX_ACCESS_TOKEN" value="pk.eyJ1Ijoiam9obm55cm9nZXJzIiwiYSI6ImNsZ2VsNjFwczA3enAzZXBzdXpmMTV3ZW8ifQ.WlDD82JvR3WQ3MS9I9Ldmw" />
     </php>
 </phpunit>

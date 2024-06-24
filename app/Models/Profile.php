@@ -19,6 +19,7 @@ class Profile extends Model
         'phone',
         'lat',
         'lon',
+        'barangay',
         'qrcode',
         'has_ptmid',
         'user_id',

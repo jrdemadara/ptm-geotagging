@@ -39,13 +39,11 @@ Route::get('/v1/uri/fetch-profiles', [ProfilesController::class, 'index']);
 
 //* Protected Routes
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
-
-    //Agents Request
     Route::get('/v1/uri/initialize-assistance', [InitializeAssistanceController::class, 'index']);
     Route::get('/v1/uri/initialize-member', [InitializeMemberController::class, 'index']);
 
-    Route::post('/v1/uri/profile', [ProfileController::class, 'store']);
+    Route::middleware(['throttle:uploads'])->group(function () {
+        Route::post('/v1/uri/profile', [ProfileController::class, 'store']);
 
-    //Admin Requests
-
+    });
 });

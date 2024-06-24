@@ -7,6 +7,7 @@ use App\Models\Beneficiary;
 use App\Models\Livelihood;
 use App\Models\Profile;
 use App\Models\Skill;
+use App\Services\MapboxService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -42,10 +43,12 @@ class ProfileController extends Controller
         $livelihoodsJson = $data['livelihoods'] ?? [];
         $assistanceJson = $data['assistance'] ?? [];
 
+        $barangay = $this->getBarangayName($data['lat'], $data['lon']);
         // Create or update the profile
         $profile = Profile::updateOrCreate([
-            'precinct' => Str::lower($data['precinct']),
+            'qrcode' => $data['qrcode'],
         ], [
+            'precinct' => Str::lower($data['precinct']),
             'lastname' => Str::lower($data['lastname']),
             'firstname' => Str::lower($data['firstname']),
             'middlename' => Str::lower($data['middlename']),
@@ -55,7 +58,7 @@ class ProfileController extends Controller
             'occupation' => Str::lower($data['occupation']),
             'lat' => $data['lat'],
             'lon' => $data['lon'],
-            'qrcode' => $data['qrcode'],
+            'barangay' => $barangay,
             'has_ptmid' => $data['hasptmid'],
             'user_id' => auth()->id(),
         ]);
@@ -123,6 +126,20 @@ class ProfileController extends Controller
         $photo = base64_decode($imageData);
         $filename = $userId . '.jpg';
         Storage::disk('local')->put($path . '/' . $filename, $photo);
+    }
+
+    protected $mapboxService;
+
+    public function __construct(MapboxService $mapboxService)
+    {
+        $this->mapboxService = $mapboxService;
+    }
+
+    public function getBarangayName($lat, $lon)
+    {
+        $barangay = $this->mapboxService->reverseGeocode($lat, $lon);
+
+        return $barangay;
     }
 
 }
