@@ -17,7 +17,7 @@ class MapboxService
 
     public function reverseGeocode($lat, $lon)
     {
-        $accessToken = env('MAPBOX_ACCESS_TOKEN');
+        $accessToken = 'pk.eyJ1Ijoiam9obm55cm9nZXJzIiwiYSI6ImNsZ2VsNjFwczA3enAzZXBzdXpmMTV3ZW8ifQ.WlDD82JvR3WQ3MS9I9Ldmw';
         $response = $this->client->request('GET', "/geocoding/v5/mapbox.places/$lon,$lat.json", [
             'query' => [
                 'access_token' => $accessToken,
