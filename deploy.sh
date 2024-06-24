@@ -1,6 +1,7 @@
 #!/bin/bash
 
-#cd /var/www/geoapp.ptmkapamilya.org
+cp -r /var/www/ptm-geotagging /var/www/geoapp.ptmkapamilya.org
+cd /var/www/geoapp.ptmkapamilya.org
 git pull origin main
 yarn install
 composer install --no-dev --optimize-autoloader
