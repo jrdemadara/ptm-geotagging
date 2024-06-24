@@ -10,5 +10,5 @@ sudo chmod -R 775 /var/www/geoapp.ptmkapamilya.org /var/www/geoapp.ptmkapamilya.
 php artisan route:cache
 php artisan config:cache
 php artisan view:cache
-cp -r /var/www/ptm-geotagging/storage/app/profile /var/www/geoapp.ptmkapamilya.org/storage/app/
+cp -r /var/www/ptm-geotagging.old/storage/app/profile /var/www/geoapp.ptmkapamilya.org/storage/app/
 #php artisan storage:link
