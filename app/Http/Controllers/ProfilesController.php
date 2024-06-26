@@ -68,15 +68,15 @@ class ProfilesController extends Controller
             'profile_id' => 'required|integer',
         ]);
 
-        $clientSecret = env('CLIENT_SECRET');
+        $clientSecret = 'd5b740b3b5d272bea86c19e694eb71b375ab7603e23872ede42b67aab52b868d';
 
-        if ($request->input('client_secret') == $clientSecret) {
+        if ($request->query('client_secret') == $clientSecret) {
 
             // Construct the file path (assuming all images are in JPG format)
-            $profileId = $request->input('profile_id');
-            $soloPath = "profile/solo/{$profileId}.jpg";
-            $familyPath = "profile/family/{$profileId}.jpg";
-            $householdPath = "profile/household/{$profileId}.jpg";
+            $profileId = $request->query('profile_id');
+            $soloPath = "solo/" . $profileId . ".jpg";
+            $familyPath = "family/" . $profileId . ".jpg";
+            $householdPath = "household/" . $profileId . ".jpg";
 
             // Check if the file exists
             if (!Storage::disk('local')->exists($soloPath)) {
