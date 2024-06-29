@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('lat');
             $table->string('lon');
+            $table->string('barangay');
+            $table->string('purok');
             $table->string('qrcode');
             $table->boolean('has_ptmid');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');

@@ -20,6 +20,7 @@ class Profile extends Model
         'lat',
         'lon',
         'barangay',
+        'purok',
         'qrcode',
         'has_ptmid',
         'user_id',

@@ -1,8 +1,9 @@
 #!/bin/bash
 
-cp -r /var/www/ptm-geotagging /var/www/geoapp.ptmkapamilya.org
-cd /var/www/geoapp.ptmkapamilya.org
-git pull origin main
+git reset --hard
+git checkout -- .
+git clean -fd
+git fetch origin
 yarn install
 composer install --no-dev --optimize-autoloader
 sudo chown -R www-data:www-data /var/www/geoapp.ptmkapamilya.org
@@ -11,5 +12,3 @@ sudo chmod -R 775 /var/www/geoapp.ptmkapamilya.org /var/www/geoapp.ptmkapamilya.
 php artisan route:cache
 php artisan config:cache
 php artisan view:cache
-cp -r /var/www/ptm-geotagging.old/storage/app/profile /var/www/geoapp.ptmkapamilya.org/storage/app/
-#php artisan storage:link

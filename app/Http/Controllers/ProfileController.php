@@ -59,6 +59,7 @@ class ProfileController extends Controller
             'lat' => $data['lat'],
             'lon' => $data['lon'],
             'barangay' => Str::lower($data['barangay']),
+            'purok' => Str::lower($data['purok']),
             'has_ptmid' => $data['hasptmid'],
             'user_id' => auth()->id(),
         ]);
