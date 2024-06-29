@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tesda', function (Blueprint $table) {
+        Schema::create('tesda_course', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('profile_id')->constrained('profiles')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('course');
+            $table->foreignId('tesda_id')->constrained('tesda')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tesda');
+        Schema::dropIfExists('tesda_course');
     }
 };

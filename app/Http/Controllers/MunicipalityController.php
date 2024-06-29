@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class MunicipalityController extends Controller
 {
@@ -23,7 +24,7 @@ class MunicipalityController extends Controller
         ]);
 
         $code = DB::connection('mysql_tupaics')->table('addresscitymun')
-            ->where('citymunDesc', $request->input('municipality'))
+            ->where('citymunDesc', Str::lower($request->input('municipality')))
             ->select('addresscitymun.citymuncode')->get();
 
         $barangay = DB::connection('mysql_tupaics')->table('addressbrgy')

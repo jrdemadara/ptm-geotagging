@@ -7,6 +7,8 @@ use App\Models\Beneficiary;
 use App\Models\Livelihood;
 use App\Models\Profile;
 use App\Models\Skill;
+use App\Models\Tesda;
+use App\Models\TesdaCourse;
 use App\Services\MapboxService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +43,7 @@ class ProfileController extends Controller
         $beneficiariesJson = $data['beneficiaries'] ?? [];
         $skillsJson = $data['skills'] ?? [];
         $livelihoodsJson = $data['livelihoods'] ?? [];
+        $tesdaJson = $data['tesda'] ?? [];
         $assistanceJson = $data['assistance'] ?? [];
 
         $barangay = $this->getBarangayName($data['lat'], $data['lon']);
@@ -108,6 +111,28 @@ class ProfileController extends Controller
                     'amount' => $assistance['amount'],
                     'released_at' => $assistance['released_at'],
                 ]);
+            }
+        }
+
+        // Create or update tesda
+        if (!is_null($tesdaJson)) {
+            foreach ($tesdaJson as $tesda) {
+                // Ensure 'tesda' is properly retrieved from $tesdaEntry
+                $tesda = Tesda::updateOrCreate([
+                    'profile_id' => $profile->id,
+                    'name' => Str::lower($tesda), // Assuming 'name' is a field in tesdaEntry
+                ]);
+
+                // Check if 'qualifications' exists and is an array
+                if (isset($tesda['courses']) && is_array($tesda['courses'])) {
+                    foreach ($tesda['courses'] as $course) {
+                        // Assuming 'Skill' is the model representing the skills table
+                        TesdaCourse::updateOrCreate([
+                            'tesda_id' => $tesda->id,
+                            'course' => Str::lower($course), // Assuming skill is just a name. Adjust if skill has more fields
+                        ]);
+                    }
+                }
             }
         }
 
