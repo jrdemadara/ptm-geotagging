@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cp -r /var/www/geoapp.ptmkapamilya.org /var/www/geoapp.ptmkapamilya.org.backup
 git reset --hard
 git checkout -- .
 git clean -fd
