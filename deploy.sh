@@ -12,3 +12,4 @@ sudo chmod -R 775 /var/www/geoapp.ptmkapamilya.org /var/www/geoapp.ptmkapamilya.
 php artisan route:cache
 php artisan config:cache
 php artisan view:cache
+php artisan key:generate
