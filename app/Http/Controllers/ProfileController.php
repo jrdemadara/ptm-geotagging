@@ -95,7 +95,8 @@ class ProfileController extends Controller
             foreach ($livelihoodsJson as $livelihood) {
                 Livelihood::updateOrCreate([
                     'profile_id' => $profile->id,
-                    'livelihood' => Str::lower($livelihood),
+                    'livelihood' => Str::lower($livelihood['livelihood']),
+                    'description' => Str::lower($livelihood['description']),
                 ]);
             }
         }
@@ -117,22 +118,16 @@ class ProfileController extends Controller
         // Create or update tesda
         if (!is_null($tesdaJson)) {
             foreach ($tesdaJson as $tesda) {
-                // Ensure 'tesda' is properly retrieved from $tesdaEntry
-                $tesda = Tesda::updateOrCreate([
+                $data = Tesda::updateOrCreate([
                     'profile_id' => $profile->id,
-                    'name' => Str::lower($tesda), // Assuming 'name' is a field in tesdaEntry
+                    'name' => Str::lower($tesda['name']),
                 ]);
 
-                // Check if 'qualifications' exists and is an array
-                if (isset($tesda['courses']) && is_array($tesda['courses'])) {
-                    foreach ($tesda['courses'] as $course) {
-                        // Assuming 'Skill' is the model representing the skills table
-                        TesdaCourse::updateOrCreate([
-                            'tesda_id' => $tesda->id,
-                            'course' => Str::lower($course), // Assuming skill is just a name. Adjust if skill has more fields
-                        ]);
-                    }
-                }
+                TesdaCourse::updateOrCreate([
+                    'tesda_id' => $data->id,
+                    'course' => Str::lower($tesda['course']),
+                ]);
+
             }
         }
 

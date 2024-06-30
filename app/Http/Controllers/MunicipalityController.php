@@ -29,7 +29,7 @@ class MunicipalityController extends Controller
 
         $barangay = DB::connection('mysql_tupaics')->table('addressbrgy')
             ->where('citymunCode', $code[0]->citymuncode)
-            ->select('brgyDesc AS barangay')->get();
+            ->select('brgyDesc AS name')->get();
 
         return response()->json($barangay);
     }
