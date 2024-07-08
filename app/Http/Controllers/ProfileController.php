@@ -104,13 +104,12 @@ class ProfileController extends Controller
         // Create or update assistance
         if (!is_null($assistanceJson)) {
             foreach ($assistanceJson as $assistance) {
-                Assistance::updateOrCreate([
+                Assistance::create([
                     'profile_id' => $profile->id,
                     'assistance' => Str::lower($assistance['assistance']),
-
-                ], [
                     'amount' => $assistance['amount'],
                     'released_at' => $assistance['released_at'],
+
                 ]);
             }
         }
