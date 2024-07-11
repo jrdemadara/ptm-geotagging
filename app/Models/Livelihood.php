@@ -10,6 +10,7 @@ class Livelihood extends Model
     use HasFactory;
     protected $fillable = [
         'livelihood',
+        'description',
         'profile_id',
     ];
 }

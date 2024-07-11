@@ -109,7 +109,6 @@ class ProfileController extends Controller
                     'assistance' => Str::lower($assistance['assistance']),
                     'amount' => $assistance['amount'],
                     'released_at' => $assistance['released_at'],
-
                 ]);
             }
         }
