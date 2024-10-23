@@ -12,6 +12,7 @@ class Beneficiary extends Model
         'precinct',
         'fullname',
         'birthdate',
+        'qrcode',
         'profile_id',
     ];
 }

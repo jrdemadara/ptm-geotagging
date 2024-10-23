@@ -64,6 +64,7 @@ class ProfileController extends Controller
             'barangay' => Str::lower($data['barangay']),
             'purok' => Str::lower($data['purok']),
             'has_ptmid' => $data['hasptmid'],
+            'is_muslim' => $data['ismuslim'],
             'user_id' => auth()->id(),
         ]);
 
@@ -76,6 +77,7 @@ class ProfileController extends Controller
                 ], [
                     'precinct' => $beneficiaryData['precinct'],
                     'birthdate' => $beneficiaryData['birthdate'],
+                    'qrcode' => $beneficiaryData['qrcode'],
                 ]);
             }
         }

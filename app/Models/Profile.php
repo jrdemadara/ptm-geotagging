@@ -23,6 +23,7 @@ class Profile extends Model
         'purok',
         'qrcode',
         'has_ptmid',
+        'is_muslim',
         'user_id',
     ];
 }
