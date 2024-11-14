@@ -13,6 +13,7 @@ class Beneficiary extends Model
         'fullname',
         'birthdate',
         'qrcode',
+        'is_muslim',
         'profile_id',
     ];
 }

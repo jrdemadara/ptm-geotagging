@@ -77,6 +77,7 @@ class ProfileController extends Controller
                 ], [
                     'precinct' => $beneficiaryData['precinct'],
                     'birthdate' => $beneficiaryData['birthdate'],
+                    'is_muslim' => $beneficiaryData['ismuslim'],
                     'qrcode' => $beneficiaryData['qrcode'] ? $beneficiaryData['qrcode'] : $profile->id . "-" . $profile->qrcode,
                 ]);
             }
