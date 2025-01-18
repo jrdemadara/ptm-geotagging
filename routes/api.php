@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\GeodataController;
+use App\Http\Controllers\AssistanceController;
 use App\Http\Controllers\InitializeAssistanceController;
 use App\Http\Controllers\InitializeMemberController;
 use App\Http\Controllers\LoginAdminController;
@@ -30,14 +30,16 @@ Route::post('/v1/uri/register', [RegisterController::class, 'store']);
 Route::post('/v1/uri/login', [LoginController::class, 'store']);
 Route::post('/v1/uri/admin-register', [RegisterAdminController::class, 'store']);
 Route::post('/v1/uri/admin-login', [LoginAdminController::class, 'store']);
-Route::get('/v1/uri/geodata', [GeodataController::class, 'index']);
+//Route::get('/v1/uri/geodata', [GeodataController::class, 'index']);
 Route::get('/v1/uri/fetch-profiles', [ProfilesController::class, 'index']);
 Route::get('/v1/uri/fetch-images', [ProfilesController::class, 'fetchProfileImages']);
+Route::post('/v1/uri/release-assistance', [AssistanceController::class, 'save']);
 
 //* Protected Routes
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/v1/uri/initialize-assistance', [InitializeAssistanceController::class, 'index']);
     Route::get('/v1/uri/initialize-member', [InitializeMemberController::class, 'index']);
+    Route::get('/v1/uri/validate-profile', [AssistanceController::class, 'validateProfile']);
 
     Route::middleware(['throttle:uploads'])->group(function () {
         Route::post('/v1/uri/profile', [ProfileController::class, 'store']);
