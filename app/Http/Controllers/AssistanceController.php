@@ -57,10 +57,9 @@ class AssistanceController extends Controller
             // Return the profile with the image data and assistance status
             return response()->json($profile);
         }
-        return response()->json($profile);
 
         // Return a not found response if the profile doesn't exist
-        //return response()->json(['error' => 'Profile not found'], 404);
+        return response()->json(['error' => 'Profile not found'], 404);
     }
 
     public function validateProfilePersonal(Request $request)
