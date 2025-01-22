@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/v1/uri/municipality', [MunicipalityController::class, 'index']);
 Route::get('/v1/uri/barangay', [MunicipalityController::class, 'barangay']);
 Route::post('/v1/uri/register', [RegisterController::class, 'store']);
-Route::post('/v1/uri/login', [LoginController::class, 'store']);
+Route::post('/v1/uri/login', [LoginController::class, 'store'])->name('login');
 Route::post('/v1/uri/admin-register', [RegisterAdminController::class, 'store']);
 Route::post('/v1/uri/admin-login', [LoginAdminController::class, 'store']);
 //Route::get('/v1/uri/geodata', [GeodataController::class, 'index']);
