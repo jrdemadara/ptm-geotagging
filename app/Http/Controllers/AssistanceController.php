@@ -36,7 +36,7 @@ class AssistanceController extends Controller
 
         $assistanceExists = Assistance::where('profile_id', $profile->id)
             ->where('assistance', Str::lower($assistance))
-            ->whereDate('release_at', now()->format('Y-m-d')) // Today's date in 'YYYY-MM-DD' format
+            ->whereDate('release_at', '!=', now()->format('Y-m-d')) // Today's date in 'YYYY-MM-DD' format
             ->exists();
 
         // Check if the profile exists
