@@ -36,7 +36,7 @@ class AssistanceController extends Controller
 
         $assistanceExists = Assistance::where('profile_id', $profile->id)
             ->where('assistance', Str::lower($assistance))
-            ->where('release_at', now()->format('Y-m-d'))
+            ->where('released_at', now()->format('Y-m-d'))
             ->exists();
 
         // Check if the profile exists
@@ -60,6 +60,7 @@ class AssistanceController extends Controller
         }
 
         // Return a not found response if the profile doesn't exist
+        //return response()->json(['data' => $assistanceExists], 200);
         return response()->json(['error' => 'Profile not found'], 404);
     }
 
