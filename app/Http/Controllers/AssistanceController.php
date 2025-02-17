@@ -156,7 +156,8 @@ class AssistanceController extends Controller
         $startDate = $request->input('start_date');
         $endDate   = $request->input('end_date');
 
-        $data = DB::selectRaw("
+        $data = DB::table('assistance')
+            ->selectRaw("
         assistance.released_at AS date,
         UPPER(assistance.assistance) AS assistance,
         UPPER(CONCAT(profiles.lastname, ', ', profiles.firstname, ' ', COALESCE(profiles.middlename, ''))) AS fullname,
@@ -170,7 +171,7 @@ class AssistanceController extends Controller
             ->leftJoin('indorser', 'tagging.indorser_id', '=', 'indorser.id')
             ->whereBetween('assistance.released_at', [$startDate, $endDate])
             ->where('assistance.amount', '>', 0)
-            ->orderByRaw('COALESCE(indorser.fullname, "") ASC') // Sorts null values first, then alphabetically
+            ->orderByRaw('COALESCE(indorser.fullname, "") ASC') // Sort null values first
             ->get();
 
         return response()->json($data);

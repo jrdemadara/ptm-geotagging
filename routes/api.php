@@ -33,6 +33,7 @@ Route::post('/v1/uri/admin-login', [LoginAdminController::class, 'store']);
 //Route::get('/v1/uri/geodata', [GeodataController::class, 'index']);
 //Route::get('/v1/uri/fetch-profiles', [ProfilesController::class, 'index']);
 Route::get('/v1/uri/fetch-images', [ProfilesController::class, 'fetchProfileImages']);
+Route::get('/v1/uri/fetch-assistance-by-date', [AssistanceController::class, 'fetchByDateRange']);
 
 //* Protected Routes
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
@@ -41,7 +42,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/v1/uri/validate-profile', [AssistanceController::class, 'validateProfile']);
     Route::get('/v1/uri/validate-profile-personal', [AssistanceController::class, 'validateProfilePersonal']);
     Route::post('/v1/uri/release-assistance', [AssistanceController::class, 'save']);
-    Route::get('/v1/uri/fetch-assistance-by-date', [AssistanceController::class, 'fetchByDateRange']);
 
     Route::middleware(['throttle:uploads'])->group(function () {
         Route::post('/v1/uri/profile', [ProfileController::class, 'store']);
