@@ -156,21 +156,21 @@ class AssistanceController extends Controller
         $startDate = $request->input('start_date');
         $endDate   = $request->input('end_date');
 
-        $data = DB::table('assistance as t1')
-            ->selectRaw("
-            t1.released_at AS date,
-            UPPER(t1.assistance) AS assistance,
-            UPPER(CONCAT(t2.lastname, ', ', t2.firstname, ' ', COALESCE(t2.middlename, ''))) AS fullname,
-            UPPER(t2.barangay) AS barangay,
-            UPPER(t2.purok) AS purok,
-            t1.amount AS amount,
-            t4.fullname AS endorser
-        ")
-            ->join('profiles as t2', 't1.profile_id', '=', 't2.id')
-            ->leftJoin('tagging as t3', 't2.id', '=', 't3.profile_id')
-            ->leftJoin('indorser as t4', 't3.indorser_id', '=', 't4.id')
-            ->whereBetween('t1.released_at', [$startDate, $endDate])
-            ->where('t1.amount', '>', 0)
+        $data = DB::selectRaw("
+        assistance.released_at AS date,
+        UPPER(assistance.assistance) AS assistance,
+        UPPER(CONCAT(profiles.lastname, ', ', profiles.firstname, ' ', COALESCE(profiles.middlename, ''))) AS fullname,
+        UPPER(profiles.barangay) AS barangay,
+        UPPER(profiles.purok) AS purok,
+        assistance.amount AS amount,
+        indorser.fullname AS endorser
+    ")
+            ->join('profiles', 'assistance.profile_id', '=', 'profiles.id')
+            ->leftJoin('tagging', 'profiles.id', '=', 'tagging.profile_id')
+            ->leftJoin('indorser', 'tagging.indorser_id', '=', 'indorser.id')
+            ->whereBetween('assistance.released_at', [$startDate, $endDate])
+            ->where('assistance.amount', '>', 0)
+            ->orderByRaw('COALESCE(indorser.fullname, "") ASC') // Sorts null values first, then alphabetically
             ->get();
 
         return response()->json($data);
