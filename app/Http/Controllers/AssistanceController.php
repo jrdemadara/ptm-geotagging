@@ -7,6 +7,7 @@ use App\Models\Livelihood;
 use App\Models\Profile;
 use App\Models\Skill;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AssistanceController extends Controller
@@ -147,6 +148,32 @@ class AssistanceController extends Controller
             'message'    => 'Assistance record created successfully.',
             'assistance' => $assistance,
         ], 201);
+
+    }
+
+    public function fetchByDateRange(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate   = $request->input('end_date');
+
+        $data = DB::table('assistance as t1')
+            ->selectRaw("
+            t1.released_at AS date,
+            UPPER(t1.assistance) AS assistance,
+            UPPER(CONCAT(t2.lastname, ', ', t2.firstname, ' ', COALESCE(t2.middlename, ''))) AS fullname,
+            UPPER(t2.barangay) AS barangay,
+            UPPER(t2.purok) AS purok,
+            t1.amount AS amount,
+            t4.fullname AS endorser
+        ")
+            ->join('profiles as t2', 't1.profile_id', '=', 't2.id')
+            ->leftJoin('tagging as t3', 't2.id', '=', 't3.profile_id')
+            ->leftJoin('indorser as t4', 't3.indorser_id', '=', 't4.id')
+            ->whereBetween('t1.released_at', [$startDate, $endDate])
+            ->where('t1.amount', '>', 0)
+            ->get();
+
+        return response()->json($data);
 
     }
 
