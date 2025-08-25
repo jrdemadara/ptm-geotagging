@@ -14,7 +14,6 @@ class RegisterController extends Controller
         $request->validate([
             "name" => "required|string|unique:" . User::class,
             "email" => "required|string|email|unique:" . User::class,
-            "municipality" => "required|string",
             "password" => "required|string",
             "device_id" => "required|string",
         ]);
@@ -22,7 +21,6 @@ class RegisterController extends Controller
         User::create([
             "name" => Str::lower($request->input("name")),
             "email" => Str::lower($request->input("email")),
-            "municipality" => Str::lower($request->input("municipality")),
             "password" => Hash::make($request->input("password")),
             "device_id" => $request->input("device_id"),
             "is_admin" => false,

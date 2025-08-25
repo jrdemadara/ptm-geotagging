@@ -10,9 +10,11 @@ class MunicipalityController extends Controller
 {
     public function index()
     {
-        $data = DB::connection('mysql_tupaics')->table('addresscitymun')
-            ->where('provCode', '1265')
-            ->select('addresscitymun.citymuncode AS code', 'addresscitymun.citymundesc AS name')->get();
+        $data = DB::connection("mysql_tupaics")
+            ->table("addresscitymun")
+            ->where("provCode", "1265")
+            ->select("addresscitymun.citymuncode AS code", "addresscitymun.citymundesc AS name")
+            ->get();
 
         return response()->json($data);
     }
@@ -20,16 +22,14 @@ class MunicipalityController extends Controller
     public function barangay(Request $request)
     {
         $request->validate([
-            'municipality' => 'required',
+            "municipality" => "required",
         ]);
 
-        $code = DB::connection('mysql_tupaics')->table('addresscitymun')
-            ->where('citymunDesc', Str::lower($request->input('municipality')))
-            ->select('addresscitymun.citymuncode')->get();
-
-        $barangay = DB::connection('mysql_tupaics')->table('addressbrgy')
-            ->where('citymunCode', $code[0]->citymuncode)
-            ->select('brgyDesc AS name')->get();
+        $barangay = DB::connection("mysql_tupaics")
+            ->table("addressbrgy")
+            ->where("citymunCode", $request->input("municipality"))
+            ->select("addressbrgy.brgycode AS code", "addressbrgy.brgydesc AS name")
+            ->get();
 
         return response()->json($barangay);
     }
