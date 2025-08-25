@@ -49,6 +49,8 @@ Route::group(["middleware" => ["auth:sanctum", "verified"]], function () {
 
     Route::get("/v1/uri/search-member", [SearchMemberController::class, "index"]);
 
+    Route::get("/v1/uri/profiles", [ProfileController::class, "index"]);
+
     Route::middleware(["throttle:uploads"])->group(function () {
         Route::post("/v1/uri/profile", [ProfileController::class, "store"]);
     });

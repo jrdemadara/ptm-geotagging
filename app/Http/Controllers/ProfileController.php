@@ -17,6 +17,20 @@ use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
+    public function index(Request $request)
+    {
+        $userId = $request->user()->id;
+
+        $totalCount = Profile::count();
+        $totalCountByUser = Profile::where("user_id", $userId)->count();
+
+        return response()->json([
+            "user_id" => $userId,
+            "total_count" => $totalCount,
+            "total_count_by_user" => $totalCountByUser,
+        ]);
+    }
+
     public function store(Request $request)
     {
         // Validate the request data
