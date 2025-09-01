@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,27 +14,28 @@ class SearchMemberController extends Controller
             "keyword" => "required|string",
         ]);
 
-        $data = DB::connection("mysql_tupaics")
-            ->table("recipient")
-            ->where("isdelete", 0)
-            ->where(function ($query) use ($request) {
-                $query
-                    ->where("lastname", "like", "%{$request->keyword}%")
+        $data = Profile::when($request->filled("keyword"), function ($query) use ($request) {
+            $query->where(function ($sub) use ($request) {
+                $sub->where("lastname", "like", "%{$request->keyword}%")
                     ->orWhere("firstname", "like", "%{$request->keyword}%")
                     ->orWhere("middlename", "like", "%{$request->keyword}%")
                     ->orWhere("extension", "like", "%{$request->keyword}%");
-            })
+            });
+        })
             ->select(
-                "precintno AS precinct",
+                "qrcode",
+                "precinct",
                 "lastname",
                 "firstname",
                 "middlename",
                 "extension",
                 "birthdate",
-                "contactno AS contact",
+                "phone",
                 "occupation",
-                "isptmid",
+                "purok",
+                "has_ptmid as isptmid",
             )
+            ->orderBy("lastname", "asc")
             ->get();
 
         return response()->json($data);
